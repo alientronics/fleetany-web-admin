@@ -1,0 +1,32 @@
+language: php
+
+sudo: false
+
+php:
+  - 5.6
+  - 7.0
+
+addons:
+    code_climate:
+        repo_token: 82adc2a9d441c6a0181d8121e0bcd4a4dead44390a26649543471fbcdacc8ab1
+
+before_install:
+  - composer self-update
+
+install:
+  - composer install --prefer-source --no-interaction
+
+script:
+  - phpunit --coverage-clover build/logs/clover.xml --stderr --configuration phpunit.xml --debug
+  - ./vendor/bin/test-reporter
+  - vendor/bin/phpcs --standard=psr2 src/Alientronics tests/
+  - vendor/bin/phpcpd --verbose src/
+  - vendor/bin/phpmd src/ text codesize,unusedcode,naming,design
+  - vendor/bin/phploc src/
+
+notifications:
+  email:
+    recipients:
+      - henrique.dias@alientronics.com.br
+    on_success: change
+    on_failure: always

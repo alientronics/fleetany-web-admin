@@ -1,0 +1,22 @@
+engines:
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: "PSR1,PSR2"
+  phpmd:
+    enabled: true
+    config:
+      rulesets: "codesize,unusedcode,naming,design"
+  fixme:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - php
+ratings:
+   paths:
+   - src/**
+   - "**.php"
+exclude_paths:
+- "src/views/*"
