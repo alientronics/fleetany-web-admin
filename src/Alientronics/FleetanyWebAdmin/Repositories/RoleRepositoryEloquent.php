@@ -8,7 +8,7 @@ use Alientronics\CachedEloquent\Role;
 use Lang;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
-class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
+class RoleRepositoryEloquent
 {
 
     protected $rules = [

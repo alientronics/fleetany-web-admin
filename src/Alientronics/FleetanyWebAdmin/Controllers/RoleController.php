@@ -61,7 +61,6 @@ class RoleController extends Controller
     public function store()
     {
         try {
-            $this->roleRepo->validator();
             $inputs = $this->request->all();
             $validateRole = $this->roleRepo->validateRole($inputs);
             if (!empty($validateRole)) {
@@ -109,7 +108,6 @@ class RoleController extends Controller
     {
         try {
             $role = $this->roleRepo->find($idRole);
-            $this->roleRepo->validator();
             $inputs = $this->request->all();
             $validateRole = $this->roleRepo->validateRole($inputs, $idRole);
             if (!empty($validateRole)) {
