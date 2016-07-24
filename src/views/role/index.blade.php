@@ -18,7 +18,7 @@
     		'pageActive' => 'role',
          	'sortFilters' => [
                 ["class" => "mdl-cell--4-col", "name" => "name", "lang" => "admin.Role"], 
-                ["class" => "mdl-cell--hide-phone mdl-cell--hide-tablet mdl-cell--6-col", "name" => "description", "lang" => "admin.Description"], 
+                ["class" => "mdl-cell--hide-phone mdl-cell--hide-tablet mdl-cell--6-col", "name" => "description", "lang" => "admin.description"], 
     		] 
     	]
     ])
