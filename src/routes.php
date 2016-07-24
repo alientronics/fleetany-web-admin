@@ -11,14 +11,14 @@
 |
 */
 
-Route::group(
-    [
-    'middleware' => ['admin',
-    'acl'],
-    'can' => 'view.role'],
-    function () {
+// Route::group(
+//     [
+//     'middleware' => ['admin',
+//     'acl'],
+//     'can' => 'view.role'],
+//     function () {
         Route::resource('role', 'RoleController');
         Route::get('role/destroy/{id}', 'RoleController@destroy');
         Route::post('permissions/create', 'RoleController@createPermission');
-    }
-);
+//     }
+// );
