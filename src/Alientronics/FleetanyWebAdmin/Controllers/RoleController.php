@@ -64,7 +64,7 @@ class RoleController extends Controller
             $this->roleRepo->validator();
             $inputs = $this->request->all();
             $validateRole = $this->roleRepo->validateRole($inputs);
-            if(!empty($validateRole)) {
+            if (!empty($validateRole)) {
                 return $this->redirect->back()->with('message', $validateRole);
             }
             
@@ -112,7 +112,7 @@ class RoleController extends Controller
             $this->roleRepo->validator();
             $inputs = $this->request->all();
             $validateRole = $this->roleRepo->validateRole($inputs, $idRole);
-            if(!empty($validateRole)) {
+            if (!empty($validateRole)) {
                 return $this->redirect->back()->with('message', $validateRole);
             }
             $this->roleRepo->update($inputs, $idRole);
@@ -145,13 +145,13 @@ class RoleController extends Controller
         try {
             $inputs = $this->request->all();
             $validatePermission = $this->roleRepo->validatePermission($inputs);
-            if(!empty($validatePermission)) {
+            if (!empty($validatePermission)) {
                 return $this->redirect->back()->with('message', $validatePermission);
             }
             
-            $role = $this->roleRepo->createPermission($inputs);
+            $this->roleRepo->createPermission($inputs);
             
-            $urlBack = empty($inputs['permissiondialog_role_id']) ? 'role/create' : 
+            $urlBack = empty($inputs['permissiondialog_role_id']) ? 'role/create' :
                                     'role/'.$inputs['permissiondialog_role_id'].'/edit';
             
             return $this->redirect->to($urlBack)->with('message', Lang::get(

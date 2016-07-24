@@ -7,7 +7,6 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use Alientronics\CachedEloquent\Role;
 use Lang;
 use Kodeine\Acl\Models\Eloquent\Permission;
-use function GuzzleHttp\json_encode;
 
 class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
 {
@@ -56,22 +55,22 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
                         $query->where('name', $inputs['name'])
                             ->orWhere('slug', $inputs['slug'])
                             ->orWhere('description', $inputs['description']);
-                    });
+        });
         
-        if(!empty($idRole)) {
+        if (!empty($idRole)) {
             $role = $role->where('id', '<>', $idRole);
         }
         
         $role = $role->first();
         
-        if(!empty($role)) {
-            if($role->name == $inputs['name']) {
+        if (!empty($role)) {
+            if ($role->name == $inputs['name']) {
                 $errors[] = Lang::get('admin.roleexists');
             }
-            if($role->slug == $inputs['slug']) {
+            if ($role->slug == $inputs['slug']) {
                 return Lang::get('admin.slugexists');
             }
-            if($role->description == $inputs['description']) {
+            if ($role->description == $inputs['description']) {
                 return Lang::get('admin.descriptionexists');
             }
         }
@@ -85,19 +84,19 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         $permission = Permission::where(function ($query) use ($inputs) {
                         $query->where('name', $inputs['permissiondialog_name'])
                             ->orWhere('description', $inputs['permissiondialog_description']);
-                    });
+        });
         
-        if(!empty($idPermission)) {
+        if (!empty($idPermission)) {
             $permission = $permission->where('id', '<>', $idPermission);
         }
         
         $permission = $permission->first();
         
-        if(!empty($permission)) {
-            if($permission->name == $inputs['name']) {
+        if (!empty($permission)) {
+            if ($permission->name == $inputs['name']) {
                 $errors[] = Lang::get('admin.permissionexists');
             }
-            if($permission->description == $inputs['description']) {
+            if ($permission->description == $inputs['description']) {
                 return Lang::get('admin.descriptionexists');
             }
         }
@@ -118,14 +117,14 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
             'description' => $inputs['permissiondialog_description']
         ];
         
-        if(!empty($inputs['permissiondialog_inherit_id'])) {
+        if (!empty($inputs['permissiondialog_inherit_id'])) {
             $fields['inherit_id'] = $inputs['permissiondialog_inherit_id'];
         }
         
-        if(!empty($inputs['permissiondialog_slug'])) {
+        if (!empty($inputs['permissiondialog_slug'])) {
             $inputs['permissiondialog_slug'] = explode(",", $inputs['permissiondialog_slug']);
             $fields['slug'] = [];
-            foreach($inputs['permissiondialog_slug'] as $slug) {
+            foreach ($inputs['permissiondialog_slug'] as $slug) {
                 $fields['slug'][$slug] = true;
             }
         } else {
@@ -134,5 +133,4 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         
         $permissionStudent = Permission::create($fields);
     }
-    
 }
