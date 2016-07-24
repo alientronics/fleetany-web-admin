@@ -1,6 +1,6 @@
 <?php
 
-namespace Alientronics\FleetanyWebAdmin\Controllers;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\RoleRepositoryEloquent;
@@ -49,8 +49,13 @@ class RoleController extends Controller
         $role_permissions = [];
 
         $permissions = Permission::get();
+    
+        $permissiondialog = [];
+        $permissiondialog['permissions'] = Permission::lists('name', 'id');
+        $permissiondialog['permissions']->splice(0, 0, ["" => ""]);
+        $permissiondialog['role_id'] = "";
         
-        return view("role.edit", compact('role', 'role_permissions', 'permissions'));
+        return view("role.edit", compact('role', 'role_permissions', 'permissions', 'permissiondialog'));
     }
 
     public function store()
@@ -68,7 +73,7 @@ class RoleController extends Controller
             
             return $this->redirect->to('role')->with('message', Lang::get(
                 'general.succefullcreate',
-                ['table'=> Lang::get('roles.Role')]
+                ['table'=> Lang::get('admin.Role')]
             ));
         } catch (ValidatorException $e) {
             return $this->redirect->back()->withInput()
@@ -86,11 +91,17 @@ class RoleController extends Controller
         }
         
         $permissions = Permission::get();
+    
+        $permissiondialog = [];
+        $permissiondialog['permissions'] = Permission::lists('name', 'id');
+        $permissiondialog['permissions']->splice(0, 0, ["" => ""]);
+        $permissiondialog['role_id'] = $role->id;
         
         return view("role.edit", compact(
             'role',
             'role_permissions',
-            'permissions'
+            'permissions',
+            'permissiondialog'
         ));
     }
     
@@ -109,7 +120,7 @@ class RoleController extends Controller
         
             return $this->redirect->to('role')->with('message', Lang::get(
                 'general.succefullupdate',
-                ['table'=> Lang::get('roles.Role')]
+                ['table'=> Lang::get('admin.Role')]
             ));
         } catch (ValidatorException $e) {
             return $this->redirect->back()->withInput()
@@ -126,6 +137,30 @@ class RoleController extends Controller
             return $this->redirect->to('role')->with('message', Lang::get("general.deletedregister"));
         } else {
             return $this->redirect->to('role')->with('message', Lang::get("general.deletedregistererror"));
+        }
+    }
+
+    public function createPermission()
+    {
+        try {
+            $inputs = $this->request->all();
+            $validatePermission = $this->roleRepo->validatePermission($inputs);
+            if(!empty($validatePermission)) {
+                return $this->redirect->back()->with('message', $validatePermission);
+            }
+            
+            $role = $this->roleRepo->createPermission($inputs);
+            
+            $urlBack = empty($inputs['permissiondialog_role_id']) ? 'role/create' : 
+                                    'role/'.$inputs['permissiondialog_role_id'].'/edit';
+            
+            return $this->redirect->to($urlBack)->with('message', Lang::get(
+                'general.succefullcreate',
+                ['table'=> Lang::get('admin.Permission')]
+            ));
+        } catch (ValidatorException $e) {
+            return $this->redirect->back()->withInput()
+                   ->with('errors', $e->getMessageBag());
         }
     }
 }

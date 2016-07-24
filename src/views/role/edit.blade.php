@@ -18,6 +18,10 @@
 	<section class="demo-section demo-section--textfield demo-page--textfield mdl-upgraded">
 		<div class="demo-preview-block">
 
+@include('includes.dialogs.permissioncreate', [
+	'permissiondialog' => $permissiondialog
+])
+
 @if (!$role->id)
 {!! Form::open(['route' => 'role.store']) !!}
 @else
@@ -26,8 +30,6 @@
         'route' => ['role.update',$role->id]
     ]) !!}
 @endif
-		    
-    
             <div id="name" class="mdl-textfield mdl-js-textfield is-upgraded is-focused mdl-textfield--floating-label @if ($errors->has('name')) is-invalid is-dirty @endif"" data-upgraded="eP">
             	{!!Form::text('name', $role->name, ['id' => 'name', 'class' => 'mdl-textfield__input'])!!}
             	{!!Form::label('name', Lang::get('admin.name'), ['class' => 'mdl-color-text--primary-contrast mdl-textfield__label'])!!}
@@ -47,14 +49,15 @@
             </div>
     
         	<div class="div_entry_permissions">
-        		<div @if (empty($permissions)) style="display:none" @endif class="mdl-textfield mdl-js-textfield is-upgraded is-focused mdl-textfield--floating-label @if ($errors->has('permissions')) is-invalid is-dirty @endif"" data-upgraded="eP">
+        		<div @if (empty($permissions)) style="display:none" @endif class="dialog-add-item-combobox mdl-textfield mdl-js-textfield is-upgraded is-focused mdl-textfield--floating-label @if ($errors->has('permissions')) is-invalid is-dirty @endif"" data-upgraded="eP">
              		@foreach($permissions as $permission)
                  		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="permission{{$permission->id}}">
                           <input name="permissions[]" type="checkbox" id="permission{{$permission->id}}" class="mdl-checkbox__input" value={{$permission->id}}  @if(in_array($permission->id, $role_permissions)) checked @endif />
                           <span class="mdl-checkbox__label">{{$permission->name}}</span>
                         </label>
                     @endforeach
-        			{!!Form::label('permissions', Lang::get('admin.Permissions'), ['class' => 'mdl-color-text--primary-contrast mdl-textfield__label is-dirty'])!!}
+        			<i id="permission-add" class="material-icons dialog-add-item-button">add_circle_outline</i>
+					{!!Form::label('permissions', Lang::get('admin.Permissions'), ['class' => 'mdl-color-text--primary-contrast mdl-textfield__label is-dirty'])!!}
         			<span class="mdl-textfield__error">{{ $errors->first('description') }}</span>
         		</div>
             </div>

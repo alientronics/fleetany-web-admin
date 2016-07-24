@@ -1,13 +1,15 @@
 <?php
 
-namespace Alientronics\FleetanyWebAdmin\Repositories;
+namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Alientronics\CachedEloquent\Role;
 use Lang;
+use Kodeine\Acl\Models\Eloquent\Permission;
+use function GuzzleHttp\json_encode;
 
-class RoleRepositoryEloquent
+class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
 {
 
     protected $rules = [
@@ -77,10 +79,60 @@ class RoleRepositoryEloquent
         return "";
     }
     
+    public function validatePermission($inputs, $idPermission = null)
+    {
+        $errors = "";
+        $permission = Permission::where(function ($query) use ($inputs) {
+                        $query->where('name', $inputs['permissiondialog_name'])
+                            ->orWhere('description', $inputs['permissiondialog_description']);
+                    });
+        
+        if(!empty($idPermission)) {
+            $permission = $permission->where('id', '<>', $idPermission);
+        }
+        
+        $permission = $permission->first();
+        
+        if(!empty($permission)) {
+            if($permission->name == $inputs['name']) {
+                $errors[] = Lang::get('admin.permissionexists');
+            }
+            if($permission->description == $inputs['description']) {
+                return Lang::get('admin.descriptionexists');
+            }
+        }
+        
+        return "";
+    }
+    
     public function updateRolePermissions($role_id, $permissions)
     {
         $role = Role::find($role_id);
         $role->syncPermissions($permissions);
+    }
+    
+    public function createPermission($inputs)
+    {
+        $fields = [
+            'name'        => $inputs['permissiondialog_name'],
+            'description' => $inputs['permissiondialog_description']
+        ];
+        
+        if(!empty($inputs['permissiondialog_inherit_id'])) {
+            $fields['inherit_id'] = $inputs['permissiondialog_inherit_id'];
+        }
+        
+        if(!empty($inputs['permissiondialog_slug'])) {
+            $inputs['permissiondialog_slug'] = explode(",", $inputs['permissiondialog_slug']);
+            $fields['slug'] = [];
+            foreach($inputs['permissiondialog_slug'] as $slug) {
+                $fields['slug'][$slug] = true;
+            }
+        } else {
+            $fields['slug'] = "";
+        }
+        
+        $permissionStudent = Permission::create($fields);
     }
     
 }
