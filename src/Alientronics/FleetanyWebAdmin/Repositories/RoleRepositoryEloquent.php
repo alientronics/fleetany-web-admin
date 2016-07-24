@@ -17,35 +17,22 @@ class RoleRepositoryEloquent
         'description'      => 'min:3|required',
         ];
 
-    public function model()
-    {
-        return Role::class;
-    }
-
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
     
     public function results($filters = [])
     {
-        $companies = $this->scopeQuery(function ($query) use ($filters) {
+        $roles = Role::select('roles.*');
             
-            $query = $query->select('roles.*');
-            
-            if (!empty($filters['name'])) {
-                $query = $query->where('name', 'like', '%'.$filters['name'].'%');
-            }
-            if (!empty($filters['description'])) {
-                $query = $query->where('description', 'like', '%'.$filters['description'].'%');
-            }
+		if (!empty($filters['name'])) {
+			$roles = $roles->where('name', 'like', '%'.$filters['name'].'%');
+		}
+		if (!empty($filters['description'])) {
+			$roles = $roles->where('description', 'like', '%'.$filters['description'].'%');
+		}
 
-            $query = $query->orderBy($filters['sort'], $filters['order']);
-            
-            return $query;
-        })->paginate($filters['paginate']);
+		$roles = $roles->orderBy($filters['sort'], $filters['order'])
+						->paginate($filters['paginate']);
         
-        return $companies;
+        return $roles;
     }
     
     public function validateRole($inputs, $idRole = null)

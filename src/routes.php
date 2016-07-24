@@ -17,8 +17,8 @@ Route::group(
     'acl'],
     'can' => 'view.role'],
     function () {
-        Route::resource('role', 'RoleController');
-        Route::get('role/destroy/{id}', 'RoleController@destroy');
-        Route::post('permissions/create', 'RoleController@createPermission');
+        Route::resource('role', '\Alientronics\FleetanyWebAdmin\Controllers\RoleController');
+        Route::get('role/destroy/{id}', '\Alientronics\FleetanyWebAdmin\Controllers\RoleController@destroy');
+        Route::post('permissions/create', '\Alientronics\FleetanyWebAdmin\Controllers\RoleController@createPermission');
     }
 );
