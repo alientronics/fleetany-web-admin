@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace Alientronics\FleetanyWebAdmin\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -131,6 +131,6 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
             $fields['slug'] = "";
         }
         
-        $permissionStudent = Permission::create($fields);
+        Permission::create($fields);
     }
 }

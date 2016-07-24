@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace Alientronics\FleetanyWebAdmin\Repositories;
 
 use Prettus\Repository\Contracts\RepositoryInterface;
 

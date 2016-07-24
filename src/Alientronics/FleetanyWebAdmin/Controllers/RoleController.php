@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Alientronics\FleetanyWebAdmin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\RoleRepositoryEloquent;
+use Alientronics\FleetanyWebAdmin\Repositories\RoleRepositoryEloquent;
 use Lang;
 use Log;
 use Prettus\Validator\Exceptions\ValidatorException;
