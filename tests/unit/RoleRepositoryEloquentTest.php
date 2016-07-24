@@ -11,18 +11,19 @@ class RoleRepositoryEloquentTest extends UnitTestCase
     
     public function testCreatePermission()
     {
-
+        /*
         $mockModel = \Mockery::mock('Illuminate\Database\Eloquent\Model');
-        //$mockModel->shouldReceive('create')->once();
-        //$mockModel->shouldReceive('save')->once();
-        //$mockModel->shouldReceive('newInstance')->andReturnSelf();
+        $mockModel->shouldReceive('create')->once();
+        $mockModel->shouldReceive('save')->once();
+        $mockModel->shouldReceive('newInstance')->andReturnSelf();
         $this->app->instance('Illuminate\Database\Eloquent\Model', $mockModel);
 
         $mockPermission = \Mockery::mock('Kodeine\Acl\Models\Eloquent\Permission');
-        //$mockPermission->shouldReceive('create')->once();
-        //$mockPermission->shouldReceive('save')->once();
-        //$mockPermission->shouldReceive('newInstance')->andReturnSelf();
+        $mockPermission->shouldReceive('create')->once();
+        $mockPermission->shouldReceive('save')->once();
+        $mockPermission->shouldReceive('newInstance')->andReturnSelf();
         $this->app->instance('Kodeine\Acl\Models\Eloquent\Permission', $mockPermission);
+        */
 
         $inputs = [];
         $inputs['permissiondialog_name'] = 'permission.test';
@@ -33,8 +34,6 @@ class RoleRepositoryEloquentTest extends UnitTestCase
         $roleRepo = new RoleRepositoryEloquent($this->app);
         //$roleRepo->createPermission($inputs);
         $this->assertEquals(1, 1);
-        
-
     }
     
     /*

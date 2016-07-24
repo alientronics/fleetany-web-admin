@@ -17,7 +17,7 @@ class AdminControllerTest extends AcceptanceTestCase
 
     public function testIndex()
     {
-    	$roles = [ 0 => (object)['name' => 'entity roles' , 'description' => 'role description'] ];
+        $roles = [ 0 => (object)['name' => 'entity roles' , 'description' => 'role description'] ];
         $this->setEloquentMock('results', $roles);
         $this->get('/role')->see('entity roles');
     }

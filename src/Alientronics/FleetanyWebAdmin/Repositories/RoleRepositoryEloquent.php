@@ -26,20 +26,20 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-	
+    
     public function results($filters = [])
     {
         $roles = Role::select('roles.*');
             
-		if (!empty($filters['name'])) {
-			$roles = $roles->where('name', 'like', '%'.$filters['name'].'%');
-		}
-		if (!empty($filters['description'])) {
-			$roles = $roles->where('description', 'like', '%'.$filters['description'].'%');
-		}
+        if (!empty($filters['name'])) {
+            $roles = $roles->where('name', 'like', '%'.$filters['name'].'%');
+        }
+        if (!empty($filters['description'])) {
+            $roles = $roles->where('description', 'like', '%'.$filters['description'].'%');
+        }
 
-		$roles = $roles->orderBy($filters['sort'], $filters['order'])
-						->paginate($filters['paginate']);
+        $roles = $roles->orderBy($filters['sort'], $filters['order'])
+                        ->paginate($filters['paginate']);
         
         return $roles;
     }
