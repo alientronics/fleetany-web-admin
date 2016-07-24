@@ -8,7 +8,7 @@ use Alientronics\CachedEloquent\Role;
 use Lang;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
-class RoleRepositoryEloquent
+class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
 {
 
     protected $rules = [
@@ -17,7 +17,16 @@ class RoleRepositoryEloquent
         'description'      => 'min:3|required',
         ];
 
-    
+    public function model()
+    {
+        return Role::class;
+    }
+
+    public function boot()
+    {
+        $this->pushCriteria(app(RequestCriteria::class));
+    }
+	
     public function results($filters = [])
     {
         $roles = Role::select('roles.*');
