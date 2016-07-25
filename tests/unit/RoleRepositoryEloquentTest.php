@@ -7,52 +7,98 @@ use Alientronics\FleetanyWebAdmin\Repositories\RoleRepositoryEloquent;
 
 class RoleRepositoryEloquentTest extends UnitTestCase
 {
-
     
+    public $roleRepo;
+    public $mockPermission;
+    public $mockRole;
+
+    public function setUp()
+    {
+        parent::setUp();
+        
+        $this->mockRole = \Mockery::mock('alias:Alientronics\CachedEloquent\Role');
+        $this->mockPermission = \Mockery::mock('alias:Kodeine\Acl\Models\Eloquent\Permission');
+        $this->roleRepo = \Mockery::mock(RoleRepositoryEloquent::class)->makePartial();
+    }
+
+    public function testResults()
+    {
+        $setFilters = [
+            'name' => 'permission.test',
+            'description' => 'Permission test',
+            'sort' => 'name',
+            'order' => 'name',
+            'paginate' => '1',
+        ];
+
+        $this->mockRole->shouldReceive('select')->once()->andReturnSelf();
+        $this->mockRole->shouldReceive('where')->twice()->andReturnSelf();
+        $this->mockRole->shouldReceive('orderBy')->once()->andReturnSelf();
+        $this->mockRole->shouldReceive('paginate')->once()->andReturnSelf();
+
+        $this->roleRepo->results($setFilters);
+    }
+
+    public function testValidateRole()
+    {
+        $inputs = [];
+        $inputs['name'] = 'permission.test';
+        $inputs['description'] = 'Permission test';
+        $inputs['slug'] = "create,view";
+
+        $objRole = (object)[
+            'name' => $inputs['name'],
+            'description' => $inputs['description'],
+            'slug' => $inputs['slug']
+        ];
+        $permission_id = 2;
+
+        $this->mockRole->shouldReceive('where')->twice()->andReturnSelf();
+        $this->mockRole->shouldReceive('first')->once()->andReturn($objRole);
+        $this->roleRepo->validateRole($inputs, $permission_id);
+    }
+    
+    public function testValidatePermission()
+    {
+        $inputs = [];
+        $inputs['name'] = 'permission.test';
+        $inputs['description'] = 'Permission test';
+
+        $objPermission = (object)[
+            'name' => $inputs['name'],
+            'description' => $inputs['description']
+        ];
+        $permission_id = 2;
+
+        $this->mockPermission->shouldReceive('where')->twice()->andReturnSelf();
+        $this->mockPermission->shouldReceive('first')->once()->andReturn($objPermission);
+        $this->roleRepo->validatePermission($inputs, $permission_id);
+    }
+
+    public function testUpdateRolePermissions()
+    {
+        $role_id = 1;
+        $permissions = 2;
+
+        $this->mockRole->shouldReceive('find')->once()->andReturnSelf();
+        $this->mockRole->shouldReceive('syncPermissions')->once();
+        $this->roleRepo->updateRolePermissions($role_id, $permissions);
+    }
+
     public function testCreatePermission()
     {
-        /*
-        $mockModel = \Mockery::mock('Illuminate\Database\Eloquent\Model');
-        $mockModel->shouldReceive('create')->once();
-        $mockModel->shouldReceive('save')->once();
-        $mockModel->shouldReceive('newInstance')->andReturnSelf();
-        $this->app->instance('Illuminate\Database\Eloquent\Model', $mockModel);
-
-        $mockPermission = \Mockery::mock('Kodeine\Acl\Models\Eloquent\Permission');
-        $mockPermission->shouldReceive('create')->once();
-        $mockPermission->shouldReceive('save')->once();
-        $mockPermission->shouldReceive('newInstance')->andReturnSelf();
-        $this->app->instance('Kodeine\Acl\Models\Eloquent\Permission', $mockPermission);
-        */
-
         $inputs = [];
         $inputs['permissiondialog_name'] = 'permission.test';
         $inputs['permissiondialog_description'] = 'Permission test';
         $inputs['permissiondialog_inherit_id'] = "";
         $inputs['permissiondialog_slug'] = "create,view";
-        
-        $roleRepo = new RoleRepositoryEloquent($this->app);
-        //$roleRepo->createPermission($inputs);
-        $this->assertEquals(1, 1);
+
+        $this->mockPermission->shouldReceive('create')->once();
+        $this->roleRepo->createPermission($inputs);
     }
-    
-    /*
-    public function testUpdateRolePermissions()
+
+    public function tearDown()
     {
-        $roleAdmin = new Role();
-        $roleAdmin->name = 'Administrator';
-        $roleAdmin->slug = 'administrator';
-        $roleAdmin->description = 'manage administration privileges';
-        $roleAdmin->save();
-    
-        $permissionsAfter = $roleAdmin->getPermissions();
-        
-        $permissions = Permission::get();
-        $roleRepo = new RoleRepositoryEloquent();
-        $roleRepo->updateRolePermissions($permissions);
-    
-        $this->assertNotEquals($permissionsAfter, $permissions);
-        $this->assertEquals($roleAdmin->getPermissions(), $permissions);
+        \Mockery::close();
     }
-    */
 }
