@@ -70,9 +70,11 @@ class RoleController extends Controller
             $role = $this->roleRepo->create($inputs);
             $this->roleRepo->updateRolePermissions($role->id, $inputs['permissions']);
             
+            //Fix Segmentation fault at phpunit --coverage-clover
+            $table = Lang::get('admin.Role');
             return $this->redirect->to('role')->with('message', Lang::get(
                 'general.succefullcreate',
-                ['table'=> Lang::get('admin.Role')]
+                ['table'=> $table]
             ));
         } catch (ValidatorException $e) {
             return $this->redirect->back()->withInput()
@@ -116,9 +118,11 @@ class RoleController extends Controller
             $this->roleRepo->update($inputs, $idRole);
             $this->roleRepo->updateRolePermissions($role->id, $inputs['permissions']);
         
+            //Fix Segmentation fault at phpunit --coverage-clover
+            $table = Lang::get('admin.Role');
             return $this->redirect->to('role')->with('message', Lang::get(
                 'general.succefullupdate',
-                ['table'=> Lang::get('admin.Role')]
+                ['table'=> $table]
             ));
         } catch (ValidatorException $e) {
             return $this->redirect->back()->withInput()
@@ -152,9 +156,11 @@ class RoleController extends Controller
             $urlBack = empty($inputs['permissiondialog_role_id']) ? 'role/create' :
                                     'role/'.$inputs['permissiondialog_role_id'].'/edit';
             
+            //Fix Segmentation fault at phpunit --coverage-clover
+            $table = Lang::get('admin.Permission');
             return $this->redirect->to($urlBack)->with('message', Lang::get(
                 'general.succefullcreate',
-                ['table'=> Lang::get('admin.Permission')]
+                ['table'=> $table]
             ));
         } catch (ValidatorException $e) {
             return $this->redirect->back()->withInput()
