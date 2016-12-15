@@ -75,7 +75,6 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     
     public function validatePermission($inputs, $idPermission = null)
     {
-        $errors = "";
         $permission = Permission::where(function ($query) use ($inputs) {
                         $query->where('name', $inputs['permissiondialog_name'])
                             ->orWhere('description', $inputs['permissiondialog_description']);
@@ -89,7 +88,7 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         
         if (!empty($permission)) {
             if ($permission->name == $inputs['name']) {
-                $errors[] = Lang::get('admin.permissionexists');
+                return Lang::get('admin.permissionexists');
             }
             if ($permission->description == $inputs['description']) {
                 return Lang::get('admin.descriptionexists');
