@@ -75,7 +75,6 @@ class RoleRepositoryEloquentTest extends UnitTestCase
 
         $this->mockRole->shouldReceive('where')->twice()->andReturnSelf();
         $this->mockRole->shouldReceive('first')->once()->andReturn($objRole);
-        $this->roleRepo->validateRole($inputs, $permission_id);
         $this->assertEquals(Lang::get('admin.roleexists'), $this->roleRepo->validateRole($inputs, $permission_id));
     }
     
@@ -95,7 +94,10 @@ class RoleRepositoryEloquentTest extends UnitTestCase
     
         $this->mockRole->shouldReceive('where')->twice()->andReturnSelf();
         $this->mockRole->shouldReceive('first')->once()->andReturn($objRole);
-        $this->assertEquals(Lang::get('admin.descriptionexists'), $this->roleRepo->validateRole($inputs, $permission_id));
+        $this->assertEquals(
+            Lang::get('admin.descriptionexists'),
+            $this->roleRepo->validateRole($inputs, $permission_id)
+        );
     }
     
     public function testValidateRoleSlugExists()
@@ -148,7 +150,10 @@ class RoleRepositoryEloquentTest extends UnitTestCase
 
         $this->mockPermission->shouldReceive('where')->twice()->andReturnSelf();
         $this->mockPermission->shouldReceive('first')->once()->andReturn($objPermission);
-        $this->assertEquals(Lang::get('admin.permissionexists'), $this->roleRepo->validatePermission($inputs, $permission_id));
+        $this->assertEquals(
+            Lang::get('admin.permissionexists'),
+            $this->roleRepo->validatePermission($inputs, $permission_id)
+        );
     }
     
     public function testValidatePermissionDescriptionExists()
@@ -158,14 +163,17 @@ class RoleRepositoryEloquentTest extends UnitTestCase
         $inputs['description'] = 'Permission test';
 
         $objPermission = (object)[
-            'name' => $inputs['name'],
-            'description' => $inputs['description']."copy"
+            'name' => $inputs['name']."copy",
+            'description' => $inputs['description']
         ];
         $permission_id = 2;
 
         $this->mockPermission->shouldReceive('where')->twice()->andReturnSelf();
         $this->mockPermission->shouldReceive('first')->once()->andReturn($objPermission);
-        $this->assertEquals(Lang::get('admin.descriptionexists'), $this->roleRepo->validatePermission($inputs, $permission_id));
+        $this->assertEquals(
+            Lang::get('admin.descriptionexists'),
+            $this->roleRepo->validatePermission($inputs, $permission_id)
+        );
     }
 
     public function testUpdateRolePermissions()
