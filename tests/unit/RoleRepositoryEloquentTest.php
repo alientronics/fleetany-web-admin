@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\UnitTestCase;
 use Alientronics\FleetanyWebAdmin\Repositories\RoleRepositoryEloquent;
+use Illuminate\Support\Facades\Lang;
 
 class RoleRepositoryEloquentTest extends UnitTestCase
 {

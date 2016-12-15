@@ -46,7 +46,6 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
     
     public function validateRole($inputs, $idRole = null)
     {
-        $errors = "";
         $role = Role::where(function ($query) use ($inputs) {
                         $query->where('name', $inputs['name'])
                             ->orWhere('slug', $inputs['slug'])
