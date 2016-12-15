@@ -61,7 +61,7 @@ class RoleRepositoryEloquent extends BaseRepository implements RoleRepository
         
         if (!empty($role)) {
             if ($role->name == $inputs['name']) {
-                $errors[] = Lang::get('admin.roleexists');
+                return Lang::get('admin.roleexists');
             }
             if ($role->slug == $inputs['slug']) {
                 return Lang::get('admin.slugexists');

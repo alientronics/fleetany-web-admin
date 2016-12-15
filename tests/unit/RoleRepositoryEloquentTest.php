@@ -58,6 +58,44 @@ class RoleRepositoryEloquentTest extends UnitTestCase
         $this->roleRepo->validateRole($inputs, $permission_id);
     }
     
+    public function testValidateRoleDescriptionExists()
+    {
+        $inputs = [];
+        $inputs['name'] = 'permission.test';
+        $inputs['description'] = 'Permission test';
+        $inputs['slug'] = "create,view";
+    
+        $objRole = (object)[
+            'name' => $inputs['name']."copy",
+            'description' => $inputs['description'],
+            'slug' => $inputs['slug']
+        ];
+        $permission_id = 2;
+    
+        $this->mockRole->shouldReceive('where')->twice()->andReturnSelf();
+        $this->mockRole->shouldReceive('first')->once()->andReturn($objRole);
+        $this->assertEquals(Lang::get('admin.slugexists'), $this->roleRepo->validateRole($inputs, $permission_id));
+    }
+    
+    public function testValidateRoleSlugExists()
+    {
+        $inputs = [];
+        $inputs['name'] = 'permission.test';
+        $inputs['description'] = 'Permission test';
+        $inputs['slug'] = "create,view";
+    
+        $objRole = (object)[
+            'name' => $inputs['name']."copy",
+            'description' => $inputs['description']."copy",
+            'slug' => $inputs['slug']
+        ];
+        $permission_id = 2;
+    
+        $this->mockRole->shouldReceive('where')->twice()->andReturnSelf();
+        $this->mockRole->shouldReceive('first')->once()->andReturn($objRole);
+        $this->assertEquals(Lang::get('admin.slugexists'), $this->roleRepo->validateRole($inputs, $permission_id));
+    }
+    
     public function testValidatePermission()
     {
         $inputs = [];
